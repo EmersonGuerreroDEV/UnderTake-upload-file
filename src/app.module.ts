@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CloudinaryService } from './app.service';
-import { UploadController } from './app.controller';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -10,7 +10,7 @@ import { UploadController } from './app.controller';
       envFilePath: '.env', // Define el archivo de entorno que se va a cargar
     }),
   ],
-  controllers: [UploadController],
+  controllers: [AppController],
   providers: [CloudinaryService],
 })
 export class AppModule { }

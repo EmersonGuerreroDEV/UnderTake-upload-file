@@ -10,11 +10,7 @@ export class CloudinaryService {
   }
 
 
-  async uploadFile(file: { buffer: Buffer, originalname: string }): Promise<string> {
-    console.log(file)
-    if (!file) {
-      throw new Error('No file provided');
-    }
+  async uploadFile(file: { buffer: Buffer; originalname: string; mimetype: string }) {
     cloudinary.config({
       cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
       api_key: process.env.CLOUDINARY_API_KEY,
@@ -22,19 +18,16 @@ export class CloudinaryService {
     });
 
     return new Promise((resolve, reject) => {
-      // Usa upload_stream para subir el buffer
       const stream = cloudinary.uploader.upload_stream(
-        { resource_type: 'auto', public_id: file.originalname }, // Asigna un public_id opcionalmente
+        { resource_type: 'auto', public_id: file.originalname },
         (error, result) => {
-          if (error) {
-            return reject(error);
-          }
-          resolve(result.secure_url); // Retorna la URL segura de la imagen
+          if (error) return reject(error);
+          resolve(result);
         }
       );
-
-      // Enviar el buffer al stream
-      stream.end(file.buffer);
+      stream.end(file.buffer); // Enviar el buffer al stream
     });
   }
+
+
 }
